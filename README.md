@@ -39,7 +39,9 @@ Ensure you have the following installed on your local machine:
 2. Install dependencies:
 
    ```bash
-   npm i or npm install
+   npm i 
+   or 
+   npm install
    ```
 
 3. Start the Nest.js server:
@@ -69,7 +71,9 @@ Ensure you have the following installed on your local machine:
 3. Install dependencies:
 
    ```bash
-   npm i or npm install
+   npm i 
+   or 
+   npm install
    ```
 
 4. Start the development server:
