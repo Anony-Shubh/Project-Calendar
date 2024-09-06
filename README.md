@@ -27,34 +27,6 @@ Ensure you have the following installed on your local machine:
 - **Node.js**: v14+ [Download Node.js](https://nodejs.org/)
 - **npm**: Installed with Node.js
 
-
-### Backend Setup
-
-1. Navigate to the backend directory:
-
-   ```bash
-   cd calendar-app-frontend
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   npm i 
-   or 
-   npm install
-   ```
-
-3. Start the Nest.js server:
-
-   ```bash
-   npm run start:dev
-   ```
-
-4. The backend server will run at `http://localhost:3000`.
-
-
-### Frontend Setup
-
 1. Clone the repository:
 
    ```bash
@@ -62,7 +34,9 @@ Ensure you have the following installed on your local machine:
    cd cal
    ```
 
-2. Navigate to the frontend directory:
+### Backend Setup
+
+2. Navigate to the backend directory:
 
    ```bash
    cd calendar-app-frontend
@@ -76,13 +50,38 @@ Ensure you have the following installed on your local machine:
    npm install
    ```
 
-4. Start the development server:
+4. Start the Nest.js server:
+
+   ```bash
+   npm run start:dev
+   ```
+
+5. The backend server will run at `http://localhost:3000`.
+
+
+### Frontend Setup
+
+6. Navigate to the frontend directory:
+
+   ```bash
+   cd calendar-app-frontend
+   ```
+
+7. Install dependencies:
+
+   ```bash
+   npm i 
+   or 
+   npm install
+   ```
+
+8. Start the development server:
 
    ```bash
    npm run dev
    ```
 
-5. Open your browser and visit `http://localhost:3001` to see the app running.
+9. Open your browser and visit `http://localhost:3001` to see the app running.
 
 The backend will be available at http://localhost:3000, and the frontend will typically be at http://localhost:3001 (Next.js will automatically choose an available port).
 
