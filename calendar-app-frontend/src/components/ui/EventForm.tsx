@@ -1,8 +1,7 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Button } from '@/components/ui/button';
+import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -10,30 +9,52 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
-const formSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  description: z.string().min(1, 'Description is required'),
-  startDate: z.string().min(1, 'Start date is required'),
-  endDate: z.string().min(1, 'End date is required'),
+const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+export const formSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+  date: z
+    .string()
+    .refine((dateString) => !isNaN(Date.parse(dateString)), {
+      message: "Invalid date format",
+    })
+    .refine(
+      (dateString) => {
+        const date = new Date(dateString);
+        return date.getTime() >= new Date().setHours(0, 0, 0, 0);
+      },
+      {
+        message: "Date must be today or in the future",
+      }
+    ),
+  startTime: z.string().refine((timeString) => timeRegex.test(timeString), {
+    message: "Start time must be in HH:mm format",
+  }),
+  endTime: z.string().regex(timeRegex, "End time must be in HH:mm format"),
 });
 
-interface EventFormProps {
+type EventFormProps = {
   onSubmit: (data: z.infer<typeof formSchema>) => void;
-  initialData?: z.infer<typeof formSchema>;
-}
+  initialData?: Partial<z.infer<typeof formSchema>>;
+};
 
 const EventForm: React.FC<EventFormProps> = ({ onSubmit, initialData }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
-      title: '',
-      description: '',
-      startDate: '',
-      endDate: '',
+      title: "",
+      description: "",
+      date: new Date().toISOString().slice(0, 10), // 'YYYY-MM-DD' format for date
+      startTime: new Date().toISOString().slice(11, 16), // 'HH:mm' format for time
+      endTime: new Date(new Date().getTime() + 3600000)
+        .toISOString()
+        .slice(11, 16), // 'HH:mm' format, 1 hour after startTime
     },
   });
 
@@ -68,12 +89,12 @@ const EventForm: React.FC<EventFormProps> = ({ onSubmit, initialData }) => {
         />
         <FormField
           control={form.control}
-          name="startDate"
+          name="date"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Start Date</FormLabel>
+              <FormLabel>Date</FormLabel>
               <FormControl>
-                <Input type="datetime-local" {...field} />
+                <Input type="date" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -81,12 +102,25 @@ const EventForm: React.FC<EventFormProps> = ({ onSubmit, initialData }) => {
         />
         <FormField
           control={form.control}
-          name="endDate"
+          name="startTime"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>End Date</FormLabel>
+              <FormLabel>Start Time</FormLabel>
               <FormControl>
-                <Input type="datetime-local" {...field} />
+                <Input type="time" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="endTime"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>End Time</FormLabel>
+              <FormControl>
+                <Input type="time" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

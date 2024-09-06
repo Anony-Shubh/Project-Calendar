@@ -1,7 +1,15 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Body,
+  Param,
+  Patch,
+} from '@nestjs/common';
 import { EventsService } from './events.service';
-import { CreateEventDto } from './create-event.dto';
-import { Event } from './event.entity';
+import { CreateEventDto } from './dto/create-event.dto';
+import { Event } from './entities/event.entity';
 
 @Controller('events')
 export class EventsController {
@@ -10,6 +18,22 @@ export class EventsController {
   @Get()
   findAll(): Event[] {
     return this.eventsService.findAll();
+  }
+
+  @Get('/date/:date')
+  findAllForDate(@Param('date') date: string): Event[] {
+    return this.eventsService.findAllForDate(date);
+  }
+
+  @Get('/count/:month/:year')
+  findCountForMonth(
+    @Param('month') month: string,
+    @Param('year') year: string,
+  ) {
+    return this.eventsService.findEventCountForMonth(
+      parseInt(year),
+      parseInt(month),
+    );
   }
 
   @Get(':id')
@@ -22,8 +46,11 @@ export class EventsController {
     return this.eventsService.create(createEventDto);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateEventDto: Partial<CreateEventDto>): Event {
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateEventDto: Partial<CreateEventDto>,
+  ): Event {
     return this.eventsService.update(id, updateEventDto);
   }
 
