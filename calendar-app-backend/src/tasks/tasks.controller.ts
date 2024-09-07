@@ -11,6 +11,7 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './entities/task.entity';
+import * as webpush from 'web-push';
 
 @Controller('tasks')
 export class TasksController {
@@ -19,6 +20,11 @@ export class TasksController {
   @Post()
   create(@Body() createTaskDto: CreateTaskDto) {
     return this.tasksService.create(createTaskDto);
+  }
+
+  @Post('subscription')
+  createSubscription(@Body() subscription: webpush.PushSubscription) {
+    return this.tasksService.createSubscription(subscription);
   }
 
   @Get()

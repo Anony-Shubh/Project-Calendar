@@ -22,11 +22,9 @@ export const api = {
   async createEvent(event: Omit<Event, "id">): Promise<Event> {
     const response = await axios.post(`${API_BASE_URL}/events`, {
       ...event,
-      
     });
     return response.data;
   },
-
 
   async updateEvent(
     id: string,
@@ -79,4 +77,7 @@ export const api = {
     await axios.delete(`${API_BASE_URL}/tasks/${id}`);
   },
 
+  async sendUserSubscription(subscription: object) {
+    await axios.post(`${API_BASE_URL}/tasks/subscription`, subscription);
+  },
 };
